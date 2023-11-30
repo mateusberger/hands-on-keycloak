@@ -1,10 +1,13 @@
 package com.mateus.keycloakclient.config;
 
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-
+@Getter
 @Component
+@ToString
 public class KeycloakConfigs {
 
     @Value("${keycloak.connection.url}")
@@ -19,19 +22,9 @@ public class KeycloakConfigs {
     @Value("${keycloak.connection.password}")
     private String password;
 
-    public String getUrl() {
-        return url;
-    }
+    @Value("${keycloak.connection.realm}")
+    private String realm;
 
-    public String getClient() {
-        return client;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+    @Value("${keycloak.connection.grant_type}")
+    private String grantType;
 }

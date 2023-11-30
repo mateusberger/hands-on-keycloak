@@ -13,27 +13,33 @@ class KeycloakConfigsTest {
     private KeycloakConfigs keycloakConfigs;
 
     @Test
-    void DeveriaRetornarAPasswordDefinidaNoApplication(){
+    void deveriaRetornarAPasswordDefinidaNoApplication(){
 
-        assertEquals("adminPassword", keycloakConfigs.getPassword());
+        assertEquals("admin", keycloakConfigs.getPassword());
     }
 
     @Test
-    void DeveriaRetornarOUsernameDefinidoNoApplication(){
+    void deveriaRetornarOUsernameDefinidoNoApplication(){
 
         assertEquals("admin", keycloakConfigs.getUsername());
     }
 
     @Test
-    void DeveriaRetornarOClientDefinidoNoApplication(){
+    void deveriaRetornarOClientDefinidoNoApplication(){
 
         assertEquals("web-spring-boot", keycloakConfigs.getClient());
     }
 
     @Test
-    void DeveriaRetornarAUrlDefinidaNoApplication(){
+    void deveriaRetornarAUrlDefinidaNoApplication(){
 
         assertEquals("localhost:8091", keycloakConfigs.getUrl());
+    }
+
+    @Test
+    void deveriaRetornarORealmDefinidoNoApplication(){
+
+        assertEquals("master", keycloakConfigs.getRealm());
     }
 
 }

@@ -1,6 +1,8 @@
 keycloak:
   connection:
     url: "localhost:8091"
+    realm: "master"
     client: "web-spring-boot"
     username: "admin"
-    password: "adminPassword"
+    password: "admin"
+    grant_type: "password"
