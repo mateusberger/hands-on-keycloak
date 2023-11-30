@@ -1,1 +1,8 @@
+keycloak-configs:
+  url: "localhost:8091"
+  client: "web-spring-boot"
+  user: "admin"
+  password: "admin"
 
+server:
+  port: 8080
