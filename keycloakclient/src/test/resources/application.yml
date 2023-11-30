@@ -3,7 +3,4 @@ keycloak:
     url: "localhost:8091"
     client: "web-spring-boot"
     username: "admin"
-    password: "admin"
-
-server:
-  port: 8080
+    password: "adminPassword"
