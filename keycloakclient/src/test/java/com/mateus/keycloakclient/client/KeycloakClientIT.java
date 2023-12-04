@@ -1,16 +1,19 @@
 package com.mateus.keycloakclient.client;
 
 import com.mateus.keycloakclient.config.KeycloakConfigs;
-import com.mateus.keycloakclient.dto.InformacoesDeAcessoDTO;
+import com.mateus.keycloakclient.dto.CredenciaisDeUsuarioDoKeycloakDTO;
+import com.mateus.keycloakclient.dto.FormularioDeCadastroDeUsuarioDoKeycloakDTO;
 import com.mateus.keycloakclient.dto.InformacoesDeConexaoDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class KeycloakClientIT {
@@ -22,24 +25,45 @@ class KeycloakClientIT {
     private KeycloakConfigs keycloakConfigs;
 
     @Test
-    void deveriaRetornarInformacoesDeConexao_quandoEnviadoInformacoesDeAcesso(){
+    void deveriaRetornarInformacoesDeConexao_quandoEnviadoInformacoesDeAcesso() {
 
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
-        Map<String, String> form = new HashMap<>();
-
-        form.put("client_id", keycloakConfigs.getClient());
-        form.put("username", keycloakConfigs.getUsername());
-        form.put("password", keycloakConfigs.getPassword());
-        form.put("grant_type", keycloakConfigs.getGrantType());
-
-        InformacoesDeConexaoDTO informacoesDeConexaoDTO = keycloakClient.acessarKeycloak(
-                form
+        InformacoesDeConexaoDTO informacoesDeConexaoDTO = keycloakClient.autenticar(
+                keycloakConfigs.paraformularioDeAutenticacao()
         );
 
         assertNotNull(informacoesDeConexaoDTO);
         assertNotNull(informacoesDeConexaoDTO.access_token());
         assertNotNull(informacoesDeConexaoDTO.token_type());
         assertNotNull(informacoesDeConexaoDTO.expires_in());
+    }
+
+    @Test
+    void deveriaCriarUmUsuarioNovo() {
+
+        InformacoesDeConexaoDTO informacoesDeConexaoDTO = keycloakClient.autenticar(
+                keycloakConfigs.paraformularioDeAutenticacao()
+        );
+
+        String token = "Bearer " + informacoesDeConexaoDTO.access_token();
+
+        FormularioDeCadastroDeUsuarioDoKeycloakDTO formularioDeCadastroDeUsuarioDoKeycloakDTO = new FormularioDeCadastroDeUsuarioDoKeycloakDTO(
+                "newUser" + UUID.randomUUID().toString().substring(0,7),
+                true,
+                UUID.randomUUID().toString().substring(0,7) + "@email.com.br",
+                "Fulano",
+                "Sobreno Medefulano",
+                Collections.singletonList(new CredenciaisDeUsuarioDoKeycloakDTO(
+                        "password",
+                        "senha@123",
+                        false
+                ))
+        );
+
+        ResponseEntity responseEntity = keycloakClient.criarUsuario(
+                token,
+                formularioDeCadastroDeUsuarioDoKeycloakDTO
+        );
+
+        assertEquals(201, responseEntity.getStatusCode().value());
     }
 }

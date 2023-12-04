@@ -1,10 +1,10 @@
 package com.mateus.keycloakclient.client;
 
+import com.mateus.keycloakclient.dto.FormularioDeCadastroDeUsuarioDoKeycloakDTO;
 import com.mateus.keycloakclient.dto.InformacoesDeConexaoDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -17,8 +17,22 @@ public interface KeycloakClient {
             consumes = "application/x-www-form-urlencoded",
             produces = "application/json"
     )
-    InformacoesDeConexaoDTO acessarKeycloak(
+    InformacoesDeConexaoDTO autenticar(
             @RequestBody Map<String, ?> form
     );
 
+    @RequestMapping(
+            method = RequestMethod.POST,
+            value = "/admin/realms/${keycloak.connection.realm}/users",
+            consumes = "application/json",
+            produces = "application/json"
+    )
+    ResponseEntity criarUsuario(
+
+            @RequestHeader(name = "Authorization")
+            String authorizationBearerToken,
+
+            @RequestBody
+            FormularioDeCadastroDeUsuarioDoKeycloakDTO form
+    );
 }

@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -40,6 +42,17 @@ class KeycloakConfigsTest {
     void deveriaRetornarORealmDefinidoNoApplication(){
 
         assertEquals("master", keycloakConfigs.getRealm());
+    }
+
+    @Test
+    void deveriaRetornarUmMapComAsConfiguracoesDeAcesso(){
+
+        Map<String, String> form = keycloakConfigs.paraformularioDeAutenticacao();
+
+        assertEquals("web-spring-boot", form.get("client_id"));
+        assertEquals("admin", form.get("username"));
+        assertEquals("admin", form.get("password"));
+        assertEquals("password", form.get("grant_type"));
     }
 
 }
